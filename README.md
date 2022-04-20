@@ -1,0 +1,2 @@
+# Invasion_process
+Invasion process R function. The function revieve a single layer with grid or mosaic polygons. Each polygon contain a date of the first recorded invasion. The function calculates the number of neighbouring polygons and the months whe the focal polygon was invaded. If the focal polygon is not invaded, it provide the status of the focal polygon relative to a maximum or preferential date.
