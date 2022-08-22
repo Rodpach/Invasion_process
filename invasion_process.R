@@ -1,12 +1,20 @@
 invasion_process  = function(layer, date_col, poligon_id_col, max_date_ymd = NA){
+#'invasion_process' obtains data from a 'sf' multipolygon grided layer object that contains two columns: one of dates and the other containing ids.
+#The dates of each subpolygon that constitute the grid represents the first record of an event (i.e.first invasion date of a species).
+#'invasion_process' returns the input layer with data for each subpolygon constituting the grid, regarding their neighboring polygons with the event and the time (months) since it occur, relative to the focal polygon.
+
+  #layer = a sf multipolygon grid object.
+  #date_col = character vector of 'layer' attribute/column with dates of first invasion. data must be in date lubridate format. NA if not invaded.
+  #poligon_id_col = character vector of 'layer' attribute/column with id.
+  #max_date_ymd = date as character vector in yyyy/mm/dd format. Specify the last day of the invasion. If not specified, last day in 'date_col' will be used.
   
   library(dplyr)
   library(sf)
   library(lubridate)
   
   
-  if(is.na(max_date_ymd)){
-    max_date_ymd <- max(pull(layer,"first_invasion"), na.rm = T)
+  if(is.na(max_date_ymd)){ #If max
+    max_date_ymd <- max(pull(layer, date_col), na.rm = T)
   } else{max_date_ymd = ymd(max_date_ymd)}
   
   
