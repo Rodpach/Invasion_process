@@ -2,6 +2,10 @@
 library(sf)
 library(lubridate)
 library(dplyr)
+
+devtools::source_url("https://raw.githubusercontent.com/Rodpach/Invasion_process/master/invasion_process.R")
+devtools::source_url("https://raw.githubusercontent.com/Rodpach/Invasion_process/master/sim_spatialinvasion.R")
+
 #Invasion process
 Svulg_30x30 = st_read("ES_30x30_mex.shp")
 Svulg_30x30_ip = invasion_process(layer = Svulg_30x30, date_col = "frst_nv", 
