@@ -1,4 +1,4 @@
-sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasion_period, invasion_seed, growth_rate = NA, print_gif = F, path_gif = NA){
+sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasion_period, invasion_seed, random_growth = T, growth_rate = NA, print_gif = F, path_gif = NA){
   # 'sim_spatialinvasion' uses a 'sf' multipolygon grided layer object to simulate random and permanent expansions of an event (i.e.first invasion date of a species) 
   #  to adjacent spaces, with an specific growth rate.
   
@@ -7,7 +7,7 @@ sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasio
   
   # The event can only expand form active event subpolygons to adjacent subpolygons without active event. Once the event is active in a subpolygon, it will be for the rest of the simulation.
   
-  #  Only the number neighboring subpolygons with active event, with adjacent subpolygons without event (expansion frontier) count to calculate the expansion, given the expansion rate.
+  #  Only the number neighboring subpolygons with active event, with adjacent subpolygons without event (expansion frontier) count to calculate the expansion, given a random growth or a constant expansion rate.
   
   # 'sim_spatialinvasion' returns a data.frame with eigh valued for each simulation period (step): number of simulation period, current subpolygons with active event at the star of period,
   #  number of subpolygons with active events in the expansion frontier, number of subpolygons available for invasion (adjacent to the invasion frontier), number of subpolygons
@@ -29,7 +29,11 @@ sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasio
   library(ggplot2)
   library(dplyr)
   
-  if(is.na(growth_rate)){stop(print("Specify growth rate"))}
+  
+  if(isFALSE(random_growth)){
+    if(is.na(growth_rate)){stop(print("Specify growth rate"))}
+  }
+  
   
   if(print_gif & is.na(path_gif)){
     stop(print("Specify a path directory for your gif on 'path_gif'")) 
@@ -88,7 +92,7 @@ sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasio
       any(x)
     })
     
-    template_simulated_invasion_adjacente = filter(noninvaded_grid, template_simulated_invasion_intersect, is.na(invaded)) # filters intersected subpolygons.
+    template_simulated_invasion_adjacente = filter(noninvaded_grid, template_simulated_invasion_intersect, is.na(invaded)) # filters non-active events, adjacent to active events.
     
     # Obtains the number of subpolygons with active event at the expansion frontier, adjacent to subpolygons without active event.
     template_simulated_invasion_intersect_invadidos = st_intersects(invaded_grid,
@@ -103,24 +107,37 @@ sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasio
     
     template_simulated_invasion_invadido_n = dim(invaded_grid)[1] #Total number of subpolygons with active event at star of period.
     template_simulated_invasion_invadido_n_adj = dim(invaded_grid_adjacent)[1] #Number of edjacent subpolygons with active event, adjacent to subpolygons without active event.
-    template_simulated_invasion_invadido_n_ganado = ceiling(dim(invaded_grid_adjacent)[1]*(growth_rate-1)) #Calculate the number of new invaded subpolygons, based on 'layer_template_invadido_n_adj' * (growth_rate-1)
-    template_simulated_invasion_invadido_n_n2 = template_simulated_invasion_invadido_n+template_simulated_invasion_invadido_n_ganado #Update number of total subpolygons with active event.
     
     
-    #Two invasion options. The first option occurs If the number new active events is greater that the number of subpolygons without the event, available for expansion. 
-    # the second option is the opposite: more available subpolygons than the number of new active events.
     
-    #1
-    if(dim(template_simulated_invasion_adjacente)[1] < template_simulated_invasion_invadido_n_ganado){ 
-      template_new_invaded_fid = sample(pull(template_simulated_invasion_adjacente, poligon_id_col), template_simulated_invasion_invadido_n_ganado, replace = T) #Randomly selects subpolygons to update as active events with replacement
+    
+    if(random_growth){ #RANDOM GROWTH
+      template_simulated_invasion_invadido_n_ganado = sample(0:dim(template_simulated_invasion_adjacente)[1], 1) #Randomly choose n number of new events, limited to the available non-active adjacent grid-cells
+      template_simulated_invasion_invadido_n_n2 = template_simulated_invasion_invadido_n+template_simulated_invasion_invadido_n_ganado #Update number of total subpolygons with active event.
       
-      template_simulated_invasion$invaded = ifelse(pull(template_simulated_invasion, poligon_id_col) %in% unique(template_new_invaded_fid) | 
-                                                     template_simulated_invasion$invaded == 1, 1, NA) #updates new subpolygons as active events
-    } else{
-      template_new_invaded_fid = sample(pull(template_simulated_invasion_adjacente, poligon_id_col), template_simulated_invasion_invadido_n_ganado, replace = F) #Randomly selects subpolygons to update as active events.
+      template_new_invaded_fid = sample(pull(template_simulated_invasion_adjacente, poligon_id_col), template_simulated_invasion_invadido_n_ganado, replace = F) #Randomly selects subpolygons to update as active events with replacement
       
       template_simulated_invasion$invaded = ifelse(pull(template_simulated_invasion, poligon_id_col) %in% template_new_invaded_fid | 
                                                      template_simulated_invasion$invaded == 1, 1, NA) #updates new subpolygons as active events
+      
+    } else{ #CONSTANT GROWTH RATE
+      template_simulated_invasion_invadido_n_ganado = ceiling(dim(invaded_grid_adjacent)[1]*(growth_rate-1)) #Calculate the number of new invaded subpolygons, based on 'layer_template_invadido_n_adj' * (growth_rate-1)
+      template_simulated_invasion_invadido_n_n2 = template_simulated_invasion_invadido_n+template_simulated_invasion_invadido_n_ganado #Update number of total subpolygons with active event.
+      #Two invasion options. The first option occurs If the number new active events is greater that the number of subpolygons without the event, available for expansion. 
+      # the second option is the opposite: more available subpolygons than the number of new active events.
+      
+      #1
+      if(dim(template_simulated_invasion_adjacente)[1] < template_simulated_invasion_invadido_n_ganado){ 
+        template_new_invaded_fid = sample(pull(template_simulated_invasion_adjacente, poligon_id_col), template_simulated_invasion_invadido_n_ganado, replace = T) #Randomly selects subpolygons to update as active events with replacement
+        
+        template_simulated_invasion$invaded = ifelse(pull(template_simulated_invasion, poligon_id_col) %in% unique(template_new_invaded_fid) | 
+                                                       template_simulated_invasion$invaded == 1, 1, NA) #updates new subpolygons as active events
+      } else{
+        template_new_invaded_fid = sample(pull(template_simulated_invasion_adjacente, poligon_id_col), template_simulated_invasion_invadido_n_ganado, replace = F) #Randomly selects subpolygons to update as active events.
+        
+        template_simulated_invasion$invaded = ifelse(pull(template_simulated_invasion, poligon_id_col) %in% template_new_invaded_fid | 
+                                                       template_simulated_invasion$invaded == 1, 1, NA) #updates new subpolygons as active events
+      }
     }
     
     #DATA.FRAME UPDATE with new value, given the processed period.
