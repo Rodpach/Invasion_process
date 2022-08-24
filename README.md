@@ -1,19 +1,20 @@
-Untitled
+Assessment of invasion processes and their simulations
 ================
 R. Pacheco-Muñoz
-2022-08-23
+
 
 # Invasion process and their simulation
 
 This constitute the supplementary material of *FACTORS AFFECTING
 INVASION PROCESS OF THE EUROPEAN STARLING (STURNUS VULGARIS) AND THE
 EURASIAN COLLARED DOVE (STREPTOPELIADECAOCTO) IN A MEGADIVERSE COUNTRY*
-(Ceja-Madrigal et al.XXXX). In this document we show how to use the
-functions `invasion_process` and `sim_spatialinvasion` in a tandem
-assessment framework, following a single example of their use. In this
-example we provide data obtained from [GBIF.org](GBIF.org) [(11 April
-2022; GBIF Occurrence Download)](https://doi.org/10.15468/dl.8z9dxy)
-only of *Sturnus vulgaris* in continental Mexico, using a 30x30 km grid.
+(Ceja-Madrigal et al.XXXX; *in press*). In this document we show how to
+use the functions `invasion_process` and `sim_spatialinvasion` in a
+tandem assessment framework, following a single example of their use. In
+this example we provide data obtained from [GBIF.org](GBIF.org) [(11
+April 2022; GBIF Occurrence
+Download)](https://doi.org/10.15468/dl.8z9dxy) only of *Sturnus
+vulgaris* in continental Mexico, using a 30x30 km grid.
 
 ## invasion process
 
@@ -215,12 +216,12 @@ Svulg_30x30_sim_df
 |               1 |          2 |        2 |        16 |             1 |           3 | Svulg_sim |      2 |
 |               2 |          3 |        3 |        20 |             1 |           4 | Svulg_sim |      2 |
 |               3 |          4 |        4 |        24 |             1 |           5 | Svulg_sim |      2 |
-|               4 |          5 |        5 |        23 |             1 |           6 | Svulg_sim |      2 |
-|               5 |          6 |        6 |        25 |             1 |           7 | Svulg_sim |      2 |
-|               6 |          7 |        7 |        25 |             1 |           8 | Svulg_sim |      2 |
-|               7 |          8 |        8 |        24 |             1 |           9 | Svulg_sim |      2 |
-|               8 |          9 |        9 |        26 |             1 |          10 | Svulg_sim |      2 |
-|               9 |         10 |       10 |        29 |             1 |          11 | Svulg_sim |      2 |
+|               4 |          5 |        5 |        26 |             1 |           6 | Svulg_sim |      2 |
+|               5 |          6 |        6 |        28 |             1 |           7 | Svulg_sim |      2 |
+|               6 |          7 |        7 |        31 |             1 |           8 | Svulg_sim |      2 |
+|               7 |          8 |        8 |        35 |             1 |           9 | Svulg_sim |      2 |
+|               8 |          9 |        9 |        35 |             1 |          10 | Svulg_sim |      2 |
+|               9 |         10 |       10 |        39 |             1 |          11 | Svulg_sim |      2 |
 
 Table 2. Data frame of Simulated expansion values, provided by
 sim_spatialinvasion.
