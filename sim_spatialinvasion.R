@@ -156,7 +156,7 @@ sim_spatialinvasion = function(layer_template, poligon_id_col, sim_name, invasio
   
   if(print_gif){ #PRINT GIF
     animation = image_animate(gif_full, fps = 5, dispose = "previous")
-    image_write(animation, paste(path_gif, "/", "simulated_invasion", sim_name, ".gif", sep = ""))
+    image_write(animation, paste(path_gif, "/", "simulated_invasion_", sim_name, ".gif", sep = ""))
     file.remove(list.files(tempdir(), pattern = sim_name,  full.names = T))
   }
   
