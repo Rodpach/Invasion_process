@@ -2,7 +2,6 @@ Assessment of invasion processes and their simulations
 ================
 R. Pacheco-Muñoz
 
-
 # Invasion process and their simulation
 
 This constitute the supplementary material of *FACTORS AFFECTING
@@ -13,13 +12,13 @@ use the functions `invasion_process` and `sim_spatialinvasion` in a
 tandem assessment framework, following a single example of their use. In
 this example we provide data obtained from [GBIF.org](GBIF.org) [(11
 April 2022; GBIF Occurrence
-Download)](https://doi.org/10.15468/dl.8z9dxy) only of *Sturnus
-vulgaris* in continental Mexico, using a 30x30 km grid.
+Download)](https://doi.org/10.15468/dl.8z9dxy) of *Sturnus vulgaris* in
+continental Mexico, using a 30x30 km grid across continental Mexico.
 
 ## invasion process
 
 The `invasion_process` R function receives and `sf` object of a single
-mulltipolygons layer grid. Each grid-cell (polygon) that constitute the
+multipolygons layer grid. Each grid-cell (polygon) that constitute the
 grid must contain an attribute/column of an `id` character vector and a
 `date` of the first recorded invasion. If the polygon is not actively
 invaded `date` is declared as `NA`. The function calculates the number
@@ -28,11 +27,11 @@ an adjacent neighbor was invaded. If the focal polygon is not invaded,
 it provided the interval in months relative to a preferential date,
 declared in `max_date_ymd`.
 
-Following our example we show a grided shapefile with each grid-cell
+Following our example we show a grided layer with each grid-cell
 identified by `FID` as an `id` and the attribute `frst_nv`, which shows
 their first record of *Sturnus vulgaris*. If `frst_nv` is `NA`, then it
-does not have any records of *Sturnus vulgaris*. We also show the
-shapefile in Figure 1.
+does not have any records of *Sturnus vulgaris*. We also show the layer
+in Figure 1.
 
 ``` r
 #load required libraries
@@ -46,7 +45,7 @@ devtools::source_url("https://raw.githubusercontent.com/Rodpach/Invasion_process
 
 ES_shapefile = as.list(c("/ES_30x30_mex.shp", "/ES_30x30_mex.shx", "/ES_30x30_mex.dbf", "/ES_30x30_mex.prj"))
 
-#Download shapefiles in temporary directory
+#Download layer in temporary directory
 
 lapply(ES_shapefile, function(x){
   download.file(paste("https://github.com/Rodpach/Invasion_process/raw/master", x, sep = ""), destfile = paste(tempdir(), x, sep = ""), quiet = T)
@@ -93,13 +92,12 @@ Svulg_30x30
 <img src="README_files/figure-gfm/Fig1-1.png" title="Figure 1. Continental Mexico grided by 30x30 km3 squares. We show grid-cells as black when records of ES are present and when not we show them as an absence" alt="Figure 1. Continental Mexico grided by 30x30 km3 squares. We show grid-cells as black when records of ES are present and when not we show them as an absence" style="display: block; margin: auto;" />
 *Figure 1. Continental Mexico grided by 30x30 km3 squares. We show
 grid-cells as black when records of ES are present and when not we show
-them as an absence*
-
-With our obtained shapefile we can are ready to use `invasion_process`.
-The function provides the same shapefile with added values of each
-individual cell regarding the interval of time in months since the first
-invaded neighbor (`period_months_first_invasion`), the number of
-`invaded_neighbors` and if it is `invaded` (*1*) or not (*0*).:
+them as an absence* With our obtained layer we are ready to use
+`invasion_process`. The function delivers the same layer with added
+values for each individual cells, regarding the interval of time in
+months since the first invaded neighbor
+(`period_months_first_invasion`), the number of `invaded_neighbors` and
+if it is `invaded` (*1*) or not (*0*).:
 
 ``` r
 #Assess the invasion process
@@ -139,17 +137,19 @@ Svulg_30x30_ip
 
 ## sim_spatialinvasion
 
-`sim_spatialinvasion` allow us to simulate a spatially explicit
-permanent spread with a fixed growth rate. This function used a grided
-shapefile with only an attribute/column specifying the id of each
-grid-cell. The purpose of `sim_spatialinvasion` is to contrast both the
-observed the **cumulative grid-cell expansion rate** and the **rate of
-invaded grid-cells over a period of time** to randomly simulated
-expansions. You can also specify the number of starting invaded
-grid-cells. To show the use of this function we will continue to use the
-`Svulg_30x30` grided shapefile.
+`sim_spatialinvasion` allows to simulate a spatially explicit permanent
+spread with a random growth or a fixed growth rate. This function uses a
+multipolygon grided layer only with an attribute/column specifying the
+id of each grid-cell or polygon. The purpose of `sim_spatialinvasion` is
+to contrast an **observed cumulative grid-cell expansion rate** and the
+**simulated cumulative grid-cell expansion over a period of time**. The
+simulated expansion can be specified with the number of starting invaded
+grid-cells, and if the expansion grows randomly `(growth_rate = F)` or
+at a fixed growth rate (i.e. `(growth_rate = 1.09)` for a growth rate of
+9%). To exemplify the use of this function we will continue to use the
+`Svulg_30x30` grided layer of continental Mexico.
 
-We first obtained the values to calculate both observed expansion rates.
+We first obtained the values to calculate the expansion rates.
 
 ``` r
 #Firs we obtain the observe rates.
@@ -178,23 +178,25 @@ Table 1. We show the first five periods of time (years) and their
 respective number of grid-cells invaded per year (n) and their
 cumulative count per year (n_cum).
 
-We proceed to load `sim_spatialinvasion`. We first obtain blank
-shapefile template from invasions and we only keep our shapefiles’
-**id**, represented by the attribute/column `FID`. We the obtain the
-period range. To use `sim_spatialinvasion`, in addition to the blank
-shapefile, you also need to prove the id of your polygons as a character
-vector, the name of the simulation as a character vector, the number of
-grid-cells invaded at the start and the fixed growth rate. You can also
-create an animated gif of the simulation by declaring `print_gif = T`.
-This can only be done if the `magick` package is installed. However, you
-do not need it to run simulations.
+We proceed to load `sim_spatialinvasion`. We first use a blank layer
+template from invasions and we only keep our layers’ **id**, represented
+by the attribute/column `FID`. We then obtained the period range. To use
+`sim_spatialinvasion`, in addition to the blank layer, you also need to
+provide as a character vector the column name that has the *id* of your
+polygons and also the name of the simulation as a character vector. The
+number of grid-cells invaded at the start is specified at
+`invasion_seed = 2` (for two staring grid-cells). You can also create an
+animated gif of the simulation by declaring `print_gif = T`. This can
+only be done if the `magick` package is installed
+`install.packages("magick")`. This is not crucial and you do not need it
+to run simulations.
 
 ``` r
 #Loads sim_spatialinvasion function from our our github repository usin 'devtools' package.
 devtools::source_url("https://raw.githubusercontent.com/Rodpach/Invasion_process/master/sim_spatialinvasion.R")
 ```
 
-    ## ℹ SHA-1 hash of file is "1b8dc48007be544f12ce9e2dd4bd67956b0b6c7a"
+    ## ℹ SHA-1 hash of file is "830ecd3eee6ae2d5f423bedb85314410c53663c9"
 
 ``` r
 Svulg_30x30_sim = Svulg_30x30[, 1] #Remove invasion values to obtain a blank grid layer template.
@@ -202,13 +204,44 @@ Svulg_30x30_sim = Svulg_30x30[, 1] #Remove invasion values to obtain a blank gri
 Svulg_invasion_obsrate_period = range(Svulg_invasion_obsrate$year) #First and last year of records
 Svulg_invasion_obsrate_period = Svulg_invasion_obsrate_period[2]-Svulg_invasion_obsrate_period[1] #obtain the period of time
 
-Svulg_30x30_sim_df = sim_spatialinvasion(layer_template = Svulg_30x30_sim, poligon_id_col = "FID", sim_name = "Svulg_sim",
+#
+# RANDOM EXPANSION
+#
+Svulg_30x30_simrandom_df_ = sim_spatialinvasion(layer_template = Svulg_30x30_sim, poligon_id_col = "FID", sim_name = "Svulg_sim_random",
                                      invasion_period = Svulg_invasion_obsrate_period, invasion_seed = 2, 
-                                     growth_rate = ((444-1) ^ (1 / Svulg_invasion_obsrate_period)), #Formula to obtain null growth rate
+                                     random_growth = T, 
                                      print_gif = F, path_gif = getwd())
 
-Svulg_30x30_sim_df
+#
+#FIXED GROWTH RATE, USINg THE COMPOUND RATE FORMULA, USING OBSERVED VALUES.
+#
+
+
+
+Svulg_30x30_sim_df = sim_spatialinvasion(layer_template = Svulg_30x30_sim, poligon_id_col = "FID", sim_name = "Svulg_sim",
+                                     invasion_period = Svulg_invasion_obsrate_period, invasion_seed = 2,
+                                     random_growth = F, 
+                                     growth_rate = ((444-1) ^ (1 / Svulg_invasion_obsrate_period)), #Fixed growth rate calculated using de compound rate formula and the observed data. 444 is the final number of gridcells.
+                                     print_gif = F, path_gif = getwd())
 ```
+
+We show both, the random and the fixed growth rate:
+
+| invasion_period | invasion_n | invasors | available | invasion_gain | invasion_n2 | sim_name         | seed_n |
+|----------------:|-----------:|---------:|----------:|--------------:|------------:|:-----------------|-------:|
+|               0 |          2 |        0 |        NA |             0 |           0 | Svulg_sim_random |      2 |
+|               1 |          2 |        2 |        16 |            11 |          13 | Svulg_sim_random |      2 |
+|               2 |         13 |       13 |        31 |            22 |          35 | Svulg_sim_random |      2 |
+|               3 |         35 |       32 |        53 |            13 |          48 | Svulg_sim_random |      2 |
+|               4 |         48 |       43 |        62 |            49 |          97 | Svulg_sim_random |      2 |
+|               5 |         97 |       64 |        76 |            41 |         138 | Svulg_sim_random |      2 |
+|               6 |        138 |       83 |        93 |             7 |         145 | Svulg_sim_random |      2 |
+|               7 |        145 |       84 |        98 |            45 |         190 | Svulg_sim_random |      2 |
+|               8 |        190 |      101 |       119 |            47 |         237 | Svulg_sim_random |      2 |
+|               9 |        237 |      137 |       139 |           101 |         338 | Svulg_sim_random |      2 |
+
+Table 2. Data frame of Simulated random expansion values, provided by
+sim_spatialinvasion.
 
 | invasion_period | invasion_n | invasors | available | invasion_gain | invasion_n2 | sim_name  | seed_n |
 |----------------:|-----------:|---------:|----------:|--------------:|------------:|:----------|-------:|
@@ -218,27 +251,33 @@ Svulg_30x30_sim_df
 |               3 |          4 |        4 |        24 |             1 |           5 | Svulg_sim |      2 |
 |               4 |          5 |        5 |        26 |             1 |           6 | Svulg_sim |      2 |
 |               5 |          6 |        6 |        28 |             1 |           7 | Svulg_sim |      2 |
-|               6 |          7 |        7 |        31 |             1 |           8 | Svulg_sim |      2 |
-|               7 |          8 |        8 |        35 |             1 |           9 | Svulg_sim |      2 |
+|               6 |          7 |        7 |        30 |             1 |           8 | Svulg_sim |      2 |
+|               7 |          8 |        8 |        33 |             1 |           9 | Svulg_sim |      2 |
 |               8 |          9 |        9 |        35 |             1 |          10 | Svulg_sim |      2 |
-|               9 |         10 |       10 |        39 |             1 |          11 | Svulg_sim |      2 |
+|               9 |         10 |       10 |        37 |             1 |          11 | Svulg_sim |      2 |
 
-Table 2. Data frame of Simulated expansion values, provided by
+Table 3. Data frame of Simulated fixed expansion values, provided by
 sim_spatialinvasion.
 
 <img src="README_files/figure-gfm/Fig2-1.png" title="Figure 2. Contrast of observed versus simulated cumulatice growth rate of ES." alt="Figure 2. Contrast of observed versus simulated cumulatice growth rate of ES." style="display: block; margin: auto;" />
 *Figure 2. Contrast of observed versus simulated cumulatice growth rate
 of ES.*
 
-To understand how `sim_spatialinvasion` works, we provide a writen
+To understand how `sim_spatialinvasion` works, we provide a detail
 explanation, accompanied by visual explanation in Figure 2. Given that
-only invaded cells can only expand no non-invaded neighboring
+only invaded cells can only expand to non-invaded neighboring
 grid-cells, in this example we show that only 62 of the total invaded
-grid-cells (347) are adjacent to non-invaded grid-cells (61). Thus,
-considering a **1.09** expansion rate, the gained grid-cells for the
-next period will be `62*.09 = 5.58`, which we upper round at a 6 new
-grid-cells. This new invaded grid-cells can only be obtained from the
-non-invaded adjacent grid-cell pool (61 red grid-cells):
+grid-cells (347) are adjacent to non-invaded grid-cells (61). In the
+case of a random growth, the minimum and the maximum of gri-cells to be
+invaded in the next step can be any number between 0 and 61.
+`sim_spatialinvasion` work with the `sample` function to randomize the
+process in each step. In the case of a fixed growth rato, we consider a
+**1.09** expansion rate, the gained grid-cells for the next period will
+be `62*.09 = 5.58`, which we upper round at a 6 new grid-cells. This new
+invaded grid-cells can only be obtained from the non-invaded adjacent
+grid-cell pool (61 red grid-cells) but the new invaded grid-cells are
+chosen randomly with the `sample` function, given the non-invaded
+adjacent grid-cell pool and the fixed growth rate:
 <img src="ejemplo_R61_B62_I347.jpg" title="Figure 3. sim_spatialinvasion functioning. We show Gray and black grid-cells with an active invasion (347 grid-cells), while non-active invasions with with an active invaded neigbor are represented by red grid-cells  (61 grid-cells). The invaded grid-cells adjacent to non-invaded grid-cells are show in black (62 grid-cells)" alt="Figure 3. sim_spatialinvasion functioning. We show Gray and black grid-cells with an active invasion (347 grid-cells), while non-active invasions with with an active invaded neigbor are represented by red grid-cells  (61 grid-cells). The invaded grid-cells adjacent to non-invaded grid-cells are show in black (62 grid-cells)" width="100%" style="display: block; margin: auto;" />
 *Figure 3. sim_spatialinvasion functioning. We show Gray and black
 grid-cells with an active invasion (347 grid-cells), while non-active
@@ -247,8 +286,13 @@ grid-cells (61 grid-cells). The invaded grid-cells adjacent to
 non-invaded grid-cells are show in black (62 grid-cells)“, out.width =
 ‘100%’, fig.align=’center*
 
-We show an animated simulation.
-<img src="simulated_invasionSvulg_sim.gif" title="Figure 4. Animated simulation of ES, with 4 starting invasion seeds and a fixed growth rate of 1.09, limited by an interval of 68 periods, which is equal to the observed period." alt="Figure 4. Animated simulation of ES, with 4 starting invasion seeds and a fixed growth rate of 1.09, limited by an interval of 68 periods, which is equal to the observed period." width="100%" style="display: block; margin: auto;" />
+We show an animated simulation of random and fixed growth.
+<img src="simulated_invasion_Svulg_sim_random.gif" title="Figure 4. Animated simulation of ES, with 2 starting invasion seeds and a random growth, limited to an interval of 68 periods, which is equal to the observed period." alt="Figure 4. Animated simulation of ES, with 2 starting invasion seeds and a random growth, limited to an interval of 68 periods, which is equal to the observed period." width="100%" style="display: block; margin: auto;" />
 *Figure 4. Animated simulation of ES, with 4 starting invasion seeds and
+a fixed growth rate of 1.09, limited by an interval of 68 periods, which
+is equal to the observed period.*
+
+<img src="simulated_invasionSvulg_sim.gif" title="Figure 5. Animated simulation of ES, with 4 starting invasion seeds and a fixed growth rate of 1.09, limited by an interval of 68 periods, which is equal to the observed period." alt="Figure 5. Animated simulation of ES, with 4 starting invasion seeds and a fixed growth rate of 1.09, limited by an interval of 68 periods, which is equal to the observed period." width="100%" style="display: block; margin: auto;" />
+*Figure 5. Animated simulation of ES, with 4 starting invasion seeds and
 a fixed growth rate of 1.09, limited by an interval of 68 periods, which
 is equal to the observed period.*
