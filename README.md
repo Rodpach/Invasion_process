@@ -230,15 +230,15 @@ We show both, the random and the fixed growth rate:
 | invasion_period | invasion_n | invasors | available | invasion_gain | invasion_n2 | sim_name         | seed_n |
 |----------------:|-----------:|---------:|----------:|--------------:|------------:|:-----------------|-------:|
 |               0 |          2 |        0 |        NA |             0 |           0 | Svulg_sim_random |      2 |
-|               1 |          2 |        2 |        16 |            11 |          13 | Svulg_sim_random |      2 |
-|               2 |         13 |       13 |        31 |            22 |          35 | Svulg_sim_random |      2 |
-|               3 |         35 |       32 |        53 |            13 |          48 | Svulg_sim_random |      2 |
-|               4 |         48 |       43 |        62 |            49 |          97 | Svulg_sim_random |      2 |
-|               5 |         97 |       64 |        76 |            41 |         138 | Svulg_sim_random |      2 |
-|               6 |        138 |       83 |        93 |             7 |         145 | Svulg_sim_random |      2 |
-|               7 |        145 |       84 |        98 |            45 |         190 | Svulg_sim_random |      2 |
-|               8 |        190 |      101 |       119 |            47 |         237 | Svulg_sim_random |      2 |
-|               9 |        237 |      137 |       139 |           101 |         338 | Svulg_sim_random |      2 |
+|               1 |          2 |        2 |        16 |             0 |           2 | Svulg_sim_random |      2 |
+|               2 |          2 |        2 |        16 |             7 |           9 | Svulg_sim_random |      2 |
+|               3 |          9 |        9 |        30 |            21 |          30 | Svulg_sim_random |      2 |
+|               4 |         30 |       27 |        42 |            36 |          66 | Svulg_sim_random |      2 |
+|               5 |         66 |       47 |        55 |            33 |          99 | Svulg_sim_random |      2 |
+|               6 |         99 |       60 |        72 |            27 |         126 | Svulg_sim_random |      2 |
+|               7 |        126 |       83 |        94 |            67 |         193 | Svulg_sim_random |      2 |
+|               8 |        193 |      108 |       102 |            90 |         283 | Svulg_sim_random |      2 |
+|               9 |        283 |       97 |        98 |            61 |         344 | Svulg_sim_random |      2 |
 
 Table 2. Data frame of Simulated random expansion values, provided by
 sim_spatialinvasion.
@@ -246,20 +246,21 @@ sim_spatialinvasion.
 | invasion_period | invasion_n | invasors | available | invasion_gain | invasion_n2 | sim_name  | seed_n |
 |----------------:|-----------:|---------:|----------:|--------------:|------------:|:----------|-------:|
 |               0 |          2 |        0 |        NA |             0 |           0 | Svulg_sim |      2 |
-|               1 |          2 |        2 |        16 |             1 |           3 | Svulg_sim |      2 |
-|               2 |          3 |        3 |        20 |             1 |           4 | Svulg_sim |      2 |
-|               3 |          4 |        4 |        24 |             1 |           5 | Svulg_sim |      2 |
-|               4 |          5 |        5 |        26 |             1 |           6 | Svulg_sim |      2 |
-|               5 |          6 |        6 |        28 |             1 |           7 | Svulg_sim |      2 |
-|               6 |          7 |        7 |        30 |             1 |           8 | Svulg_sim |      2 |
-|               7 |          8 |        8 |        33 |             1 |           9 | Svulg_sim |      2 |
-|               8 |          9 |        9 |        35 |             1 |          10 | Svulg_sim |      2 |
-|               9 |         10 |       10 |        37 |             1 |          11 | Svulg_sim |      2 |
+|               1 |          2 |        2 |        15 |             1 |           3 | Svulg_sim |      2 |
+|               2 |          3 |        3 |        18 |             1 |           4 | Svulg_sim |      2 |
+|               3 |          4 |        4 |        20 |             1 |           5 | Svulg_sim |      2 |
+|               4 |          5 |        5 |        24 |             1 |           6 | Svulg_sim |      2 |
+|               5 |          6 |        6 |        27 |             1 |           7 | Svulg_sim |      2 |
+|               6 |          7 |        7 |        26 |             1 |           8 | Svulg_sim |      2 |
+|               7 |          8 |        8 |        29 |             1 |           9 | Svulg_sim |      2 |
+|               8 |          9 |        9 |        28 |             1 |          10 | Svulg_sim |      2 |
+|               9 |         10 |       10 |        27 |             1 |          11 | Svulg_sim |      2 |
 
 Table 3. Data frame of Simulated fixed expansion values, provided by
 sim_spatialinvasion.
 
 <img src="README_files/figure-gfm/Fig2-1.png" title="Figure 2. Contrast of observed versus simulated cumulatice growth rate of ES." alt="Figure 2. Contrast of observed versus simulated cumulatice growth rate of ES." style="display: block; margin: auto;" />
+
 *Figure 2. Contrast of observed versus simulated cumulatice growth rate
 of ES.*
 
