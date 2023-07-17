@@ -4,16 +4,8 @@ R. Pacheco-Muñoz
 
 # Invasion process and their simulation
 
-This constitute the supplementary material of *FACTORS AFFECTING
-INVASION PROCESS OF THE EUROPEAN STARLING (STURNUS VULGARIS) AND THE
-EURASIAN COLLARED DOVE (STREPTOPELIADECAOCTO) IN A MEGADIVERSE COUNTRY*
-(Ceja-Madrigal et al.XXXX; *in press*). In this document we show how to
-use the functions `invasion_process` and `sim_spatialinvasion` in a
-tandem assessment framework, following a single example of their use. In
-this example we provide data obtained from [GBIF.org](GBIF.org) [(11
-April 2022; GBIF Occurrence
-Download)](https://doi.org/10.15468/dl.8z9dxy) of *Sturnus vulgaris* in
-continental Mexico, using a 30x30 km grid across continental Mexico.
+This constitute the supplementary material of _Factors affecting invasion process of a megadiverse country by two exotic bird species_ ([Ceja-Madrigal et al.2023](https://www.sciencedirect.com/science/article/pii/S2213305423000322?dgcid=coauthor#ack0005)). In this document we show how to use the functions `invasion_process` and `sim_spatialinvasion` in a tandem assessment framework, following a single example of their use. In this example we provide data obtained from [GBIF.org](GBIF.org) [(11 April 2022; GBIF Occurrence Download)](https://doi.org/10.15468/dl.8z9dxy) of _Sturnus vulgaris_ in continental Mexico, using a 30x30 km grid across continental Mexico.
+
 
 ## invasion process
 
